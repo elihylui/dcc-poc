@@ -9,13 +9,13 @@ async fn main() {
         .expect("Please set AZURE_SERVICE_BUS_NAMESPACE env variable first!");
 
     let queue_name =
-        std::env::var("dcc-poc-queue").expect("Please set AZURE_QUEUE_NAME env variable first!");
+        std::env::var("AZURE_QUEUE_NAME").expect("Please set AZURE_QUEUE_NAME env variable first!");
 
-    let policy_name = std::env::var("dcc-poc-policy")
+    let policy_name = std::env::var("AZURE_POLICY_NAME")
         .expect("Please set AZURE_POLICY_NAME env variable first!");
 
     let policy_key =
-        std::env::var("j+nDz0qZZz3J+xE0Ij1F8fpLLFtMK4DfA+ASbHfepuk=").expect("Please set AZURE_POLICY_KEY env variable first!");
+        std::env::var("AZURE_POLICY_KEY").expect("Please set AZURE_POLICY_KEY env variable first!");
 
     let http_client = azure_core::new_http_client();
 
