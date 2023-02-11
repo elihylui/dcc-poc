@@ -1,8 +1,11 @@
 use azure_messaging_servicebus::prelude::*;
+extern crate dotenv;
 
 #[tokio::main]
 async fn main() {
-    let service_bus_namespace = std::env::var("dcc-poc-test")
+    dotenv::dotenv().expect("Failed to read .env file");
+
+    let service_bus_namespace = std::env::var("AZURE_SERVICE_BUS_NAMESPACE")
         .expect("Please set AZURE_SERVICE_BUS_NAMESPACE env variable first!");
 
     let queue_name =
