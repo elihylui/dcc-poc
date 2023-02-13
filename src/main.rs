@@ -3,6 +3,12 @@ extern crate dotenv;
 
 #[tokio::main]
 async fn main() {
+    let message_to_send = "hello, world!";
+    send_message(message_to_send).await;
+    receive_message().await;
+}
+
+fn config()-> QueueClient{
     dotenv::dotenv().expect("Failed to read .env file");
 
     let service_bus_namespace = std::env::var("AZURE_SERVICE_BUS_NAMESPACE")
@@ -16,8 +22,8 @@ async fn main() {
 
     let policy_key =
         std::env::var("AZURE_POLICY_KEY").expect("Please set AZURE_POLICY_KEY env variable first!");
-
-    let http_client = azure_core::new_http_client();
+    
+        let http_client = azure_core::new_http_client();
 
     let client = QueueClient::new(
         http_client,
@@ -27,20 +33,25 @@ async fn main() {
         policy_key,
     )
     .expect("Failed to create client");
-
-    let message_to_send = "hello, world!";
-
     client
-        .send_message(message_to_send)
-        .await
-        .expect("Failed to send message while testing receive");
+}
 
-    println!("Sent Message: {message_to_send}");
+async fn send_message(message_to_send: &str)  {
+    let client = config();
+    client
+    .send_message(message_to_send)
+    .await
+    .expect("Failed to send message while testing receive");
 
+    println!("Sent Message: {message_to_send}");    
+}
+
+async fn receive_message()  {
+    let client = config();
     let received_message = client
-        .receive_and_delete_message()
-        .await
-        .expect("Failed to receive message");
+    .receive_and_delete_message()
+    .await
+    .expect("Failed to receive message");
 
-    println!("Received Message: {received_message}");
+println!("Received Message: {received_message}");
 }
